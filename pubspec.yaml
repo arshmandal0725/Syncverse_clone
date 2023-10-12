@@ -84,6 +84,10 @@ flutter:
     - assets/sync.png
     - assets/device1.jfif.jpg
     - assets/Picsart_23-07-09_09-18-48-431.jpg
+    - assets/about.png
+    - assets/faq.png
+    - assets/help.png
+    - assets/settings.png
   
 
   # An image asset can refer to one or more resolution-specific "variants", see

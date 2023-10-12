@@ -10,7 +10,6 @@ import 'package:syncverse_clone/pages/profilePage.dart';
 import 'package:syncverse_clone/wifi_connection.dart/wifi_list_1.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-
 class MyHomePage extends ConsumerStatefulWidget {
   const MyHomePage({super.key});
 
@@ -44,17 +43,10 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                 Get.to(() => const WifiList());
               },
               icon: const Icon(Icons.wifi)),
-          IconButton(
-              onPressed: () {
-                FirebaseAuth.instance.signOut().then((value) {
-                  Get.off(() => const LoginScreenView());
-                });
-              },
-              icon: const Icon(Icons.logout))
         ],
       ),
       extendBody: true,
-      drawer: const MyDrawer(),
+      drawer: MyDrawer(),
       body: _pages[_currentIndex],
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(15.0),

@@ -23,8 +23,8 @@ class _EnterPasswordState extends State<EnterPassword> {
       final channel = IOWebSocketChannel.connect('ws://$ipvp4:81');
 
       final message = json.encode({
-        "wifi name": ssid,
-        "wifi password": password,
+        "Text1": ssid,
+        "Text2": password,
       });
       channel.sink.add(message);
       Navigator.pop(context);
