@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,6 +13,15 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  AwesomeNotifications().initialize(
+      null,
+      [
+        NotificationChannel(
+            channelKey: 'basic_channel',
+            channelName: 'Basic Notifications',
+            channelDescription: 'Notification Chanel for Basic Test'),
+      ],
+      debug: true);
   runApp(ProviderScope(
       child: GetMaterialApp(
     home: StreamBuilder(

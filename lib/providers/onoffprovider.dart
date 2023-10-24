@@ -21,6 +21,7 @@ class OnoffNotifier extends StateNotifier<List<bool>> {
 
         dataMap.forEach((key, value) {
           dataList.add(DeviceModel(
+              deviceName: value["device name"],
               deviceType: value["device type"],
               image: value["image"],
               onof: value["switch condition"],
@@ -42,6 +43,12 @@ class OnoffNotifier extends StateNotifier<List<bool>> {
 
   void addbool() {
     state = [...state, false];
+  }
+
+  void removebool(int index) {
+    if (index >= 0 && index < state.length) {
+      state = List.from(state)..removeAt(index);
+    }
   }
 
   void changebool(bool onoff, int index, DeviceModel device) async {

@@ -17,6 +17,7 @@ class ParameterNotifier extends StateNotifier<Map<String, int>> {
       Get.snackbar('Error Ocurred', 'Parameters data unable to fetch');
     }*/
     state = {'Gas': 60, 'Humidity': 70, 'Temprature': 80};
+  
   }
 }
 

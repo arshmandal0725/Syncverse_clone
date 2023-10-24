@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:syncverse_clone/pages/devicename.dart';
 import 'package:syncverse_clone/providers/deviceProvider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:syncverse_clone/providers/onoffprovider.dart';
@@ -12,12 +14,13 @@ class AddDevices extends ConsumerStatefulWidget {
 
 class DeviceModel {
   DeviceModel({
+    required this.deviceName,
     required this.deviceType,
     required this.image,
     required this.onof,
     String? key,
   }) : key = key ?? '';
-
+  final String deviceName;
   final String deviceType;
   final String image;
   bool onof;
@@ -37,10 +40,11 @@ class _AddDevicesState extends ConsumerState<AddDevices> {
       var value = title;
       return GestureDetector(
         onTap: () {
-          ref.read(deviceProvider.notifier).addDevice(
-              DeviceModel(deviceType: title, image: imageUrl, onof: false));
-          ref.read(onoffProvider.notifier).addbool();
           Navigator.pop(context);
+          Get.to(() => DeviceName(
+                image: imageUrl,
+                title: title,
+              ));
         },
         child: Container(
           width: 173,
@@ -264,12 +268,27 @@ class _AddDevicesState extends ConsumerState<AddDevices> {
                               ),
                               ListTile(
                                 title: Text(
-                                  devices[index].deviceType,
+                                  devices[index].deviceName,
                                   style: const TextStyle(
                                     fontWeight: FontWeight.w700,
                                     fontSize: 20,
                                   ),
                                 ),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.04,
+                                  ),
+                                  Text(
+                                    devices[index].deviceType,
+                                    style: const TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ],
                               ),
                               const Divider(
                                 thickness: 1,
@@ -279,46 +298,45 @@ class _AddDevicesState extends ConsumerState<AddDevices> {
                                     0.04729,
                                 child: SizedBox(
                                   height: 50,
-                                  child: Column(
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Switch(
-                                            onChanged: (bool condition) {
-                                              ref
-                                                  .read(onoffProvider.notifier)
-                                                  .changebool(condition, index,
-                                                      devices[index]);
-                                            },
-                                            value: onoff[index],
-                                          ),
-                                          Container(
-                                            margin: const EdgeInsets.only(
-                                                right: 15),
-                                            child: Text(
-                                              onoff[index] ? "ON" : "OFF",
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.w700,
-                                                fontSize: 18,
-                                              ),
-                                            ),
-                                          ),
-                                          IconButton(
-                                            onPressed: () {
-                                              ref
-                                                  .read(deviceProvider.notifier)
-                                                  .removeDevice(devices[index]);
-                                            },
-                                            icon: const Icon(Icons.delete),
-                                          ),
-                                        ],
+                                      Switch(
+                                        onChanged: (bool condition) {
+                                          ref
+                                              .read(onoffProvider.notifier)
+                                              .changebool(condition, index,
+                                                  devices[index]);
+                                        },
+                                        value: onoff[index],
                                       ),
-                                      //},
-                                      //),
+                                      Container(
+                                        margin:
+                                            const EdgeInsets.only(right: 15),
+                                        child: Text(
+                                          onoff[index] ? "ON" : "OFF",
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 18,
+                                          ),
+                                        ),
+                                      ),
+                                      IconButton(
+                                        onPressed: () {
+                                          ref
+                                              .read(onoffProvider.notifier)
+                                              .removebool(index);
+                                          ref
+                                              .read(deviceProvider.notifier)
+                                              .removeDevice(devices[index]);
+                                        },
+                                        icon: const Icon(Icons.delete),
+                                      ),
                                     ],
                                   ),
+                                  //},
+                                  //),
                                 ),
                               ),
                             ],

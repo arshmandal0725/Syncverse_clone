@@ -6,17 +6,18 @@ import 'dart:convert';
 class DeviceNotifier extends StateNotifier<List<DeviceModel>> {
   DeviceNotifier() : super([]);
 
-  void addDevice(DeviceModel device) {
+  void addDevice(DeviceModel device) async {
     state = [...state, device];
     final url = Uri.https(
       'sync-verse-4a6e2-default-rtdb.firebaseio.com',
       'devices.json',
     );
 
-    http
+    final response = await http
         .post(
       url,
       body: json.encode({
+        'device name': device.deviceName,
         'device type': device.deviceType,
         'image': device.image,
         'switch condition': device.onof,
@@ -26,7 +27,9 @@ class DeviceNotifier extends StateNotifier<List<DeviceModel>> {
       // Handle the HTTP POST error here, e.g., log the error or show an error message.
       print('Error adding device: $error');
     });
-    getallDevice();
+    if (response.statusCode == 200) {
+      getallDevice();
+    }
   }
 
   Future<void> getallDevice() async {
@@ -44,6 +47,7 @@ class DeviceNotifier extends StateNotifier<List<DeviceModel>> {
 
         dataMap.forEach((key, value) {
           dataList.add(DeviceModel(
+              deviceName: value["device name"],
               deviceType: value["device type"],
               image: value["image"],
               onof: value["switch condition"],

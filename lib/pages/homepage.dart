@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:syncverse_clone/pages/addDevices_page.dart';
@@ -29,6 +30,14 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    if (ref.watch(parameterProvider)['Temprature']! >= 60) {
+      AwesomeNotifications().createNotification(
+          content: NotificationContent(
+              id: 1,
+              channelKey: 'basic_channel',
+              title: 'Alert!!!',
+              body: 'Fire Alert!!!'));
+    }
     List<DeviceModel> devices = ref.watch(deviceProvider);
     List<bool> onoff = ref.watch(onoffProvider);
     return Container(
@@ -151,14 +160,39 @@ class _HomePageState extends ConsumerState<HomePage> {
                                     ),
                                   ],
                                 ),
-                                ListTile(
-                                  title: Text(
-                                    devices[index].deviceType,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 20,
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.04,
                                     ),
-                                  ),
+                                    Text(
+                                      devices[index].deviceName,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.04,
+                                    ),
+                                    Text(
+                                      devices[index].deviceType,
+                                      style: const TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ],
                                 ),
                                 const Divider(
                                   thickness: 1,
@@ -168,50 +202,46 @@ class _HomePageState extends ConsumerState<HomePage> {
                                       0.04729,
                                   child: SizedBox(
                                     height: 50,
-                                    child: Column(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Switch(
-                                              //switch to on and of
-                                              onChanged: (bool condition) {
-                                                ref
-                                                    .read(
-                                                        onoffProvider.notifier)
-                                                    .changebool(condition,
-                                                        index, devices[index]);
-                                              },
-                                              value: onoff[index],
-                                            ),
-                                            Container(
-                                              margin: const EdgeInsets.only(
-                                                  right: 15),
-                                              child: Text(
-                                                onoff[index] ? "ON" : "OFF",
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.w700,
-                                                  fontSize: 18,
-                                                ),
-                                              ),
-                                            ),
-                                            IconButton(
-                                              onPressed: () {
-                                                ref
-                                                    .read(
-                                                        deviceProvider.notifier)
-                                                    .removeDevice(
-                                                        devices[index]);
-                                              },
-                                              icon: const Icon(Icons.delete),
-                                            ),
-                                          ],
+                                        Switch(
+                                          //switch to on and of
+                                          onChanged: (bool condition) {
+                                            ref
+                                                .read(onoffProvider.notifier)
+                                                .changebool(condition, index,
+                                                    devices[index]);
+                                          },
+                                          value: onoff[index],
                                         ),
-                                        //},
-                                        //),
+                                        Container(
+                                          margin:
+                                              const EdgeInsets.only(right: 15),
+                                          child: Text(
+                                            onoff[index] ? "ON" : "OFF",
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                        ),
+                                        IconButton(
+                                          onPressed: () {
+                                            ref
+                                                .read(onoffProvider.notifier)
+                                                .removebool(index);
+                                            ref
+                                                .read(deviceProvider.notifier)
+                                                .removeDevice(devices[index]);
+                                          },
+                                          icon: const Icon(Icons.delete),
+                                        ),
                                       ],
                                     ),
+                                    //},
+                                    //),
                                   ),
                                 ),
                               ],

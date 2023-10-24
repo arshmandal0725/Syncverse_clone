@@ -1,14 +1,14 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:syncverse_clone/modules/home_screen/views/drawer.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
-import 'package:syncverse_clone/modules/login_screen/views/login_screen_view.dart';
 import 'package:syncverse_clone/pages/addDevices_page.dart';
 import 'package:syncverse_clone/pages/homepage.dart';
 import 'package:get/get.dart';
 import 'package:syncverse_clone/pages/profilePage.dart';
+import 'package:syncverse_clone/pages/searchingpage.dart';
 import 'package:syncverse_clone/wifi_connection.dart/wifi_list_1.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class MyHomePage extends ConsumerStatefulWidget {
   const MyHomePage({super.key});
@@ -25,6 +25,15 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
     const AddDevices(),
     const ProfilePage(),
   ];
+  @override
+  void initState() {
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+      if (!isAllowed) {
+        AwesomeNotifications().requestPermissionToSendNotifications();
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +55,14 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
         ],
       ),
       extendBody: true,
-      drawer: MyDrawer(),
+      drawer: const MyDrawer(),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color(0xfff1D3557),
+        onPressed: () {
+          Get.to(() => const SearchDevice());
+        },
+        child: const Icon(Icons.search),
+      ),
       body: _pages[_currentIndex],
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(15.0),
